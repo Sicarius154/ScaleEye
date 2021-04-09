@@ -18,3 +18,7 @@ Deplpoyment is made very simple thanks to the usage of Docker compose which will
 4. Wait for the autoscaler to start
 5. Done
 
+# Usage
+Prior to using the autoscaler, you may need to modify two fields in the application configs. Watcher requires the address and port of a Prometheus instance in order to scrap metrics and process queries. In Watcher, navigate to `src/main/resources` and modify `application.conf` to point at the correct Prometheus instance. You will also need to add the target services to watch to the `mainTargets.json` file in the same directory.
+
+Once watcher is pointed at Prometheus and has the correct targets, modify the `src/main/resources/definitions.json` file to point at the services you wish to scale. Inside the docker-compose file's Scaling Engine definition, modify the `SKUBER_URL` environment variable to point at your kubernetes HTTP API instance. 
