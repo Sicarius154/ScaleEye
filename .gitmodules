@@ -1,0 +1,6 @@
+[submodule "ScalingEngine"]
+	path = ScalingEngine
+	url = git@github.com:Sicarius154/ScalingEngine.git
+[submodule "Watcher"]
+	path = Watcher
+	url = git@github.com:Sicarius154/Watcher.git
