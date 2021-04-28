@@ -16,9 +16,11 @@ Before following deployment steps, some slight configuration of Watcher needs to
 3. Run `git submodule update`
 4. CD into the Watcher submodule
 5. Modify `src/main/resources/application.conf` to ensure the metric connection details match that of your application
-6. In the root of Watcher, run `sbt assembly`
-7. Copy the JAR file from the target directory of Watcher to the root of ScaleEye and replace the current Watcher JAR with the newly generated one
-8. Repeat the same for ScalingEngine, instead modifying the connection details for Kubernetes in the config file
+6. Now Modify the targets files, also found in the reources subdirectory of Watcher to contain targets in your application
+7. In the root of Watcher, run `sbt assembly`
+8. Copy the JAR file from the target directory of Watcher to the root of ScaleEye and replace the current Watcher JAR with the newly generated one
+9. Repeat the same for ScalingEngine, instead modifying the service definitions to match services in your deployed app
+10. Ensure you also modify the docker-compose definition file to change the `SKUBER_URL` environment variable to point at your Kubernetes instance
 
 Deplpoyment is made very simple thanks to the usage of Docker compose which will deoloy both components as well as the Kafka instance needed in order to have the two components communicate. 
 
@@ -27,6 +29,4 @@ Deplpoyment is made very simple thanks to the usage of Docker compose which will
 3. Done
 
 # Usage
-Prior to using the autoscaler, you may need to modify two fields in the application configs. Watcher requires the address and port of a Prometheus instance in order to scrap metrics and process queries. In Watcher, navigate to `src/main/resources` and modify `application.conf` to point at the correct Prometheus instance. You will also need to add the target services to watch to the `mainTargets.json` file in the same directory.
-
-Once watcher is pointed at Prometheus and has the correct targets, modify the `src/main/resources/definitions.json` file to point at the services you wish to scale. Inside the docker-compose file's Scaling Engine definition, modify the `SKUBER_URL` environment variable to point at your kubernetes HTTP API instance. 
+If all steps are followed correctly, the autoscaler should now be deployed. By analyzing the logs of the deployed applications, if there are no errors then the deployment is succesful.
