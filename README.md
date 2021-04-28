@@ -13,10 +13,12 @@ The entire autoscaler should be deployed using Docker Compose. Please ensure you
 Deplpoyment is made very simple thanks to the usage of Docker compose which will deoloy both components as well as the Kafka instance needed in order to have the two components communicate. 
 
 1. Clone this repository
-2. CD into this repository's root 
-3. type `docker-compose up -d`
-4. Wait for the autoscaler to start
-5. Done
+2. Run `git submodule init`
+3. Run `git submodule update`
+4. CD into this repository's root 
+5. type `docker-compose up -d`
+6. Wait for the autoscaler to start
+7. Done
 
 # Usage
 Prior to using the autoscaler, you may need to modify two fields in the application configs. Watcher requires the address and port of a Prometheus instance in order to scrap metrics and process queries. In Watcher, navigate to `src/main/resources` and modify `application.conf` to point at the correct Prometheus instance. You will also need to add the target services to watch to the `mainTargets.json` file in the same directory.
