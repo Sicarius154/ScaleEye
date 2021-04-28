@@ -10,15 +10,21 @@ All system design and algorithm design is discussed in detail in the paper inclu
 # Building and Running
 The entire autoscaler should be deployed using Docker Compose. Please ensure you have the most up-to-date version of Docker installed, and then follow the steps below. Please not that these steps outline how to deploy the autoscaler, deploying an app to scale is out of scope for these instructions but deploying a mock application such as [Google Cloud Online Boutique Demo](https://github.com/GoogleCloudPlatform/microservices-demo) is recomended alongside the [Istio Service Mesh](https://istio.io). 
 
-Deplpoyment is made very simple thanks to the usage of Docker compose which will deoloy both components as well as the Kafka instance needed in order to have the two components communicate. 
-
+Before following deployment steps, some slight configuration of Watcher needs to be completed; ignoring these steps and skipping to deployment will work, but the autoscaler will do nothing as it does not know where to retrieve metrics.
 1. Clone this repository
 2. Run `git submodule init`
 3. Run `git submodule update`
-4. CD into this repository's root 
-5. type `docker-compose up -d`
-6. Wait for the autoscaler to start
-7. Done
+4. CD into the Watcher submodule
+5. Modify `src/main/resources/application.conf` to ensure the metric connection details match that of your application
+6. In the root of Watcher, run `sbt assembly`
+7. Copy the JAR file from the target directory of Watcher to the root of ScaleEye and replace the current Watcher JAR with the newly generated one
+8. Repeat the same for ScalingEngine, instead modifying the connection details for Kubernetes in the config file
+
+Deplpoyment is made very simple thanks to the usage of Docker compose which will deoloy both components as well as the Kafka instance needed in order to have the two components communicate. 
+
+1. type `docker-compose up -d`
+2. Wait for the autoscaler to start
+3. Done
 
 # Usage
 Prior to using the autoscaler, you may need to modify two fields in the application configs. Watcher requires the address and port of a Prometheus instance in order to scrap metrics and process queries. In Watcher, navigate to `src/main/resources` and modify `application.conf` to point at the correct Prometheus instance. You will also need to add the target services to watch to the `mainTargets.json` file in the same directory.
